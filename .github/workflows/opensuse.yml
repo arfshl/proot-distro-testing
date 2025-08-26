@@ -1,0 +1,33 @@
+name: opensuse-tumbleweed
+
+on:
+  workflow_dispatch:
+
+
+permissions:
+  contents: write
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Download rootfs
+      run: |
+        wget -q https://github.com/termux/proot-distro/releases/download/v4.21.0/opensuse-aarch64-pd-v4.21.0.tar.xz -P $GITHUB_WORKSPACE/
+    - name: Decompress rootfs
+      run: |
+        sudo tar -xJf opensuse-aarch64*.tar.xz
+    - name: Mount important filesystem
+      run: |
+        sudo mount --bind /proc $GITHUB_WORKSPACE/opensuse-aarch64/proc
+        sudo mount --bind /sys $GITHUB_WORKSPACE/opensuse-aarch64/sys
+        sudo mount --bind /run $GITHUB_WORKSPACE/opensuse-aarch64/run
+        sudo mount --bind /dev $GITHUB_WORKSPACE/opensuse-aarch64/dev
+        sudo mount --bind /dev/pts $GITHUB_WORKSPACE/opensuse-aarch64/dev/pts
+    - name: Execute some testing commands...
+      run: |
+        sudo chroot $GITHUB_WORKSPACE/opensuse-aarch64 /bin/bash -c "zypper refresh && zypper update && zypper in -t pattern xfce -y "
