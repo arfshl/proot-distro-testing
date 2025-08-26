@@ -30,4 +30,4 @@ jobs:
         sudo mount --bind /dev/pts $GITHUB_WORKSPACE/opensuse-aarch64/dev/pts
     - name: Execute some testing commands...
       run: |
-        sudo chroot $GITHUB_WORKSPACE/opensuse-aarch64 /bin/bash -c "zypper refresh && zypper -n dup && zypper in -t -n pattern xfce 
+        sudo chroot $GITHUB_WORKSPACE/opensuse-aarch64 /bin/bash -c "zypper refresh && zypper -n dup && zypper in -t -n pattern xfce" 
